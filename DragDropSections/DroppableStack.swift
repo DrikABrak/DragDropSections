@@ -110,6 +110,7 @@ struct DroppableStack: View {
     }
 }
 
+// Delegate to customize drop inside and between sections (swap and insert)
 struct ItemDropDelegate: DropDelegate {
     let dropItem: Item
     let dropSection: String
@@ -145,6 +146,7 @@ struct ItemDropDelegate: DropDelegate {
         return true
     }
     
+    // Actions when the drag element (hover) enter on the drop element (swap or remove / insert)
     func dropEntered(info: DropInfo) {
         
         guard let dragSection = dragSection, let dragItem = dragItem else { return }
@@ -158,12 +160,15 @@ struct ItemDropDelegate: DropDelegate {
             } else {
                 self.sections[dragSection]?.remove(at: dragIndex)
                 self.sections[dropSection]?.insert(dragItem, at: dropIndex)
+                
+                // Drag section becomes drop section to move element in the new section
                 self.dragSection = self.dropSection
             }
         }
     }
 }
 
+// Delegate to customize drop on section bar (specific to drop an item in empty section)
 struct ItemDropSectionDelegate: DropDelegate {
     let dropSection: String
     @Binding var dragItem: Item?
